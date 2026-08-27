@@ -32,3 +32,19 @@ def rodar_teste():
 
 if __name__ == "__main__":
     rodar_teste()
+
+# 1. Cria a frota e os DOIS tabuleiros do adversário (Computador)
+frota_computador = criar_frota()
+
+tabuleiro_comp_real = criar_tabuleiro()     # Guarda os navios ocultos 'N'
+tabuleiro_comp_visivel = criar_tabuleiro()  # Mostra apenas o que o Humano já descobriu ('~', 'X', 'O')
+
+# 2. Posiciona os navios APENAS no tabuleiro real do Computador
+posicionar_frota_automaticamente(tabuleiro_comp_real, frota_computador)
+
+# 3. Na hora da jogada do humano:
+# Exibe apenas o tabuleiro visível (onde o humano não vê as letras 'N')
+exibir_tabuleiro(tabuleiro_comp_visivel)
+
+# Passa o REAL para conferir se acertou 'N' e o VISÍVEL para marcar 'X' ou 'O'
+realizar_jogada_humano(tabuleiro_comp_real, tabuleiro_comp_visivel, frota_computador)
