@@ -11,8 +11,8 @@ import os
 from tabuleiro import criar_tabuleiro
 from navios import criar_frota, posicionar_frota_automaticamente, checar_se_afundou, checar_vitoria
 from computador import ComputadorIA
-from estatisticas import salvar_estatisticas
-from replay import salvar_replay
+from estatisticas import salvar_estatisticas, CAMINHO_ARQUIVO as CAMINHO_ESTATISTICAS
+from replay import salvar_replay, CAMINHO_REPLAY
 
 
 # ==============================================================
@@ -58,7 +58,7 @@ class BatalhaNavalGUI:
             widget.destroy()
 
     # ==============================================================
-    # MENUS COM DESIGN MODERNO
+    # MENUS COM DESIGN MODERNO E CORREÇÃO DE ESTATÍSTICAS / REPLAY
     # ==============================================================
     def criar_menu_inicial(self):
         self.limpar_janela()
@@ -98,26 +98,69 @@ class BatalhaNavalGUI:
         btn.bind("<Enter>", lambda e: btn.config(bg=bg_hover, fg=fg_hover))
         btn.bind("<Leave>", lambda e: btn.config(bg=bg_normal, fg=fg_normal))
 
-    def ler_arquivo(self, caminho):
-        try:
-            with open(caminho, 'r', encoding='utf-8') as f:
-                return f.read()
-        except FileNotFoundError:
-            return "Nenhum histórico registrado ainda. Jogue uma partida!"
-
     def exibir_estatisticas_gui(self):
-        dados = self.ler_arquivo(os.path.join("data", "estatisticas.txt"))
-        messagebox.showinfo("📊 Estatísticas Táticas", dados)
+        """Lê os dados brutos e formata o relatório de estatísticas na interface."""
+        if not os.path.exists(CAMINHO_ESTATISTICAS):
+            messagebox.showinfo("📊 Estatísticas Táticas", "Nenhuma estatística encontrada. Jogue uma partida primeiro!")
+            return
+
+        try:
+            with open(CAMINHO_ESTATISTICAS, 'r', encoding='utf-8') as arquivo:
+                linhas = [linha.strip() for linha in arquivo.readlines() if linha.strip()]
+
+            if len(linhas) < 4:
+                messagebox.showerror("Erro", "Arquivo de estatísticas corrompido ou incompleto.")
+                return
+
+            total_partidas = int(linhas[0])
+            vitorias_humano = int(linhas[1])
+            total_jogadas = int(linhas[2])
+            total_acertos = int(linhas[3])
+
+            aproveitamento = (total_acertos / total_jogadas * 100) if total_jogadas > 0 else 0.0
+
+            relatorio = (
+                f"📈 RELATÓRIO DE DESEMPENHO TÁTICO\n"
+                f"-----------------------------------------\n"
+                f"• Total de partidas jogadas: {total_partidas}\n"
+                f"• Vitórias acumuladas: {vitorias_humano}\n"
+                f"• Total de disparos efetuados: {total_jogadas}\n"
+                f"• Disparos certeiros: {total_acertos}\n"
+                f"• Taxa de aproveitamento: {aproveitamento:.1f}%\n"
+            )
+            messagebox.showinfo("📊 Estatísticas Táticas", relatorio)
+
+        except Exception as e:
+            messagebox.showerror("Erro", f"Erro ao carregar estatísticas: {e}")
 
     def reproduzir_replay_gui(self):
-        dados = self.ler_arquivo(os.path.join("data", "replay.txt"))
+        """Carrega o histórico salvo em 'ultimo_replay.txt' e exibe na janela formatada."""
+        if not os.path.exists(CAMINHO_REPLAY):
+            messagebox.showinfo("🎬 Replay", "Nenhum histórico registrado ainda. Jogue uma partida!")
+            return
+
+        try:
+            with open(CAMINHO_REPLAY, 'r', encoding='utf-8') as f:
+                dados = f.read().strip()
+            
+            if not dados:
+                messagebox.showinfo("🎬 Replay", "O arquivo de replay está vazio.")
+                return
+
+        except Exception as e:
+            messagebox.showerror("Erro", f"Não foi possível ler o arquivo de replay: {e}")
+            return
+
         janela_replay = tk.Toplevel(self.root)
         janela_replay.title("🎬 Replay da Última Batalha")
         janela_replay.configure(bg=BG_DARK)
-        janela_replay.geometry("420x350")
-        
-        texto = scrolledtext.ScrolledText(janela_replay, width=45, height=16, font=FONT_MAIN, bg=BG_CARD, fg=TEXT_LIGHT)
-        texto.pack(padx=10, pady=10)
+        janela_replay.geometry("460x380")
+
+        lbl_titulo = tk.Label(janela_replay, text="HISTÓRICO DA ÚLTIMA PARTIDA", font=("Segoe UI", 11, "bold"), bg=BG_DARK, fg=ACCENT_BLUE)
+        lbl_titulo.pack(pady=10)
+
+        texto = scrolledtext.ScrolledText(janela_replay, width=50, height=15, font=FONT_MAIN, bg=BG_CARD, fg=TEXT_LIGHT, bd=0)
+        texto.pack(padx=15, pady=(0, 15))
         texto.insert(tk.INSERT, dados)
         texto.config(state=tk.DISABLED)
 
@@ -178,7 +221,6 @@ class BatalhaNavalGUI:
         self.limpar_janela()
         self.root.geometry("820x520")
 
-        # Cabeçalho Status
         frame_status = tk.Frame(self.root, bg=BG_CARD, pady=5)
         frame_status.pack(fill=tk.X, padx=10, pady=(10, 0))
 
@@ -191,21 +233,18 @@ class BatalhaNavalGUI:
         matriz_frota = self.tab_j1_real if self.turno_atual == 1 else self.tab_adv_real
         matriz_alvo = self.tab_adv_visivel if self.turno_atual == 1 else self.tab_j1_visivel
 
-        # Frame Frota (Esquerda)
         frame_frota = tk.LabelFrame(frame_jogos, text=f" {titulo_frota} ", font=("Segoe UI", 10, "bold"), bg=BG_DARK, fg=TEXT_LIGHT)
         frame_frota.pack(side=tk.LEFT, padx=10)
         self.botoes_frota = {}
         self._construir_grade(frame_frota, self.botoes_frota, iterativo=False)
         self._colorir_frota_visivel(matriz_frota)
 
-        # Frame Alvo (Direita)
         frame_alvo = tk.LabelFrame(frame_jogos, text=f" {titulo_alvo} ", font=("Segoe UI", 10, "bold"), bg=BG_DARK, fg=ACCENT_BLUE)
         frame_alvo.pack(side=tk.RIGHT, padx=10)
         self.botoes_alvo = {}
         self._construir_grade(frame_alvo, self.botoes_alvo, iterativo=True)
         self._restaurar_estado_alvo(matriz_alvo)
 
-        # Botão de passar turno no modo PvP
         if self.modo_de_jogo == 'PVP':
             self.btn_passar = tk.Button(
                 self.root, text="🔄 PASSAR TURNO", font=("Segoe UI", 10, "bold"), bg=COLOR_MISS, fg=TEXT_LIGHT,
@@ -256,7 +295,7 @@ class BatalhaNavalGUI:
                     btn.config(bg=COLOR_MISS, fg=TEXT_LIGHT, text="•", state=tk.DISABLED)
 
     # ==============================================================
-    # LOGICA DE JOGO E ANIMAÇÃO BÁSICA
+    # LÓGICA DAS JOGADAS
     # ==============================================================
     def registrar_disparo(self, r, c):
         btn = self.botoes_alvo[(r, c)]
@@ -295,7 +334,7 @@ class BatalhaNavalGUI:
             matriz_real_alvo[r][c] = 'O'
             matriz_visivel_alvo[r][c] = 'O'
             btn.config(text="•", bg=COLOR_MISS, fg=TEXT_LIGHT, state=tk.DISABLED)
-            resultado = 'Água'
+            resultado = 'Agua'
             msg = f"🌊 TIRO NA ÁGUA em {coordenada}."
 
         self.total_jogadas += 1
@@ -337,10 +376,15 @@ class BatalhaNavalGUI:
 
     def finalizar_partida(self, vencedor):
         duracao = int(time.time() - self.inicio_tempo)
+        
+        # Salva utilizando os módulos estatisticas.py e replay.py
         salvar_estatisticas(vencedor, self.total_jogadas, self.acertos_j1)
         salvar_replay(self.historico_jogadas)
 
-        messagebox.showinfo("🏆 VITORIA TÁTICA!", f"PARTIDA ENCERRADA!\n\n👑 Vencedor: {vencedor}\n🎯 Total de Jogadas: {self.total_jogadas}\n⏱️ Tempo de Batalha: {duracao} segundos")
+        messagebox.showinfo(
+            "🏆 VITÓRIA TÁTICA!", 
+            f"PARTIDA ENCERRADA!\n\n👑 Vencedor: {vencedor}\n🎯 Total de Jogadas: {self.total_jogadas}\n⏱️ Tempo de Batalha: {duracao} segundos"
+        )
         self.criar_menu_inicial()
 
 
