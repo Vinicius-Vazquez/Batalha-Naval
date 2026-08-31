@@ -1,7 +1,7 @@
 def exibir_menu_principal():
     while True:
         print("""==================================================
-        t\tBATALHA NAVAL - GPTECH GAMES
+        \t\tBATALHA NAVAL - GPTECH GAMES
         ==================================================
         1. Nova partida
         2. Ver estatisticas

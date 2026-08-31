@@ -28,7 +28,7 @@ def realizar_jogada_humano(tabuleiro_real, tabuleiro_exibicao, frota_alvo):
             for navio in frota_alvo:
                 if (linha, coluna) in navio["posicoes"]:
                     if checar_se_afundou(tabuleiro_real, navio):
-                        print(f"Navio afundado! Você destruiu um navio {navio['tipo']} do adversário.")
+                        print(f"Navio afundado! Você destruiu um navio {navio['tipo'].lower()} do adversário.")
                         return coordenada_str, 'Acerto'
 
             print("Acerto! Você atingiu um navio inimigo.")
