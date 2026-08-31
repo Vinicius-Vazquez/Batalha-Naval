@@ -5,17 +5,17 @@ Aderente à Regra de Negócio RN01 e boas práticas PEP8.
 
 def criar_tabuleiro():
     # Gera a matriz 11x11 contendo os rótulos de colunas (A-J) e linhas (1-10).
-    tabuleiro = [[' ', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J']]
+    tabuleiros = [[' ', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J']]
     for i in range(1, 11):
         # Transforma o número em string e adiciona 10 posições de água '~'
         linha = [str(i)] + ['~'] * 10
-        tabuleiro.append(linha)
-    return tabuleiro
+        tabuleiros.append(linha)
+    return tabuleiros
 
 
-def exibir_tabuleiro(tabuleiro):
+def exibir_tabuleiro(tabuleiros):
     # Exibe o tabuleiro formatado no terminal.
-    for linha in tabuleiro:
+    for linha in tabuleiros:
         print(' '.join(f"{item:>2}" for item in linha))
 
 

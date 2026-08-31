@@ -1,4 +1,4 @@
-from navios import criar_frota, posicionar_frota_automaticamente, checar_vitoria
+from navios import criar_frota, posicionar_frota_automaticamente, checar_vitoria, conferir_frota
 from estatisticas import salvar_estatisticas, exibir_estatisticas
 from menu import exibir_menu_principal, selecao_de_modo_de_jogo
 from tabuleiro import criar_tabuleiro, exibir_tabuleiro
@@ -16,14 +16,28 @@ while True:
         if modo == '1':
             print("Iniciando partida: Jogador vs Computador")
             computador = ComputadorIA()
-            tabuleiro_humano_real = criar_tabuleiro()
-            tabuleiro_humano_visivel = criar_tabuleiro()
             tabuleiro_computador_real = criar_tabuleiro()
             tabuleiro_computador_visivel = criar_tabuleiro()
-            frota_humano = criar_frota()
             frota_computador = criar_frota()
-            posicionar_frota_automaticamente(tabuleiro_humano_real, frota_humano)
             posicionar_frota_automaticamente(tabuleiro_computador_real, frota_computador)
+
+            while True:
+                tabuleiro_humano_real = criar_tabuleiro()
+                tabuleiro_humano_visivel = criar_tabuleiro()
+                frota_humano = criar_frota()
+                posicionar_frota_automaticamente(tabuleiro_humano_real, frota_humano)
+
+                print("\nSeu tabuleiro com a frota posicionada:")
+                exibir_tabuleiro(tabuleiro_humano_real)
+                conferir_frota(frota_humano)
+
+                confirmar = input("Deseja confirmar esse posicionamento? [S]im / [R]eposicionar: ").strip().upper()
+                if confirmar == 'S':
+                    break
+                elif confirmar == 'R':
+                    print("\nReposicionando sua frota...")
+                else:
+                    print("\n[!] Opção inválida! Digite 'S' para confirmar ou 'R' para reposicionar.")
 
             inicio = time.time()
             total_jogadas = 0
@@ -108,6 +122,7 @@ while True:
                 if checar_vitoria(frota_jogador2):
                     duracao = int(time.time() - inicio)
                     vencedor = "Jogador 1"
+                    acertos_vencedor = acertos_jogador1
                     break
             
                 exibir_tabuleiro(tabuleiro_jogador1_visivel)
@@ -120,6 +135,7 @@ while True:
                 if checar_vitoria(frota_jogador1):
                     duracao = int(time.time() - inicio)
                     vencedor = "Jogador 2"
+                    acertos_vencedor = acertos_jogador2
                     break
             
             salvar_estatisticas(vencedor, total_jogadas, acertos_vencedor)

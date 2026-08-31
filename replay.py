@@ -1,5 +1,6 @@
 import os
 
+
 def salvar_replay(historico_jogadas):
     # Garantir a pasta data:
     os.makedirs('data', exist_ok=True)
@@ -15,7 +16,7 @@ def reproduzir_replay():
 
     try:
         with open(caminho_arquivo, 'r', encoding='utf-8') as arquivo:
-            linhas = arquivo.readlines()
+            linhas = [linha.strip() for linha in arquivo.readlines() if linha.strip()]
     except FileNotFoundError:
         print("\n[!] Nenhum replay encontrado. Jogue uma partida primeiro!\n")
         return
@@ -25,12 +26,18 @@ def reproduzir_replay():
         return
 
     total_jogadas = len(linhas)
-    print("\nReproduzindo replay da ultima partida...\n")
+    print("\n================ REPRODUZINDO REPLAY ================")
 
-    for i, linha in enumerate(linhas, start=1):
-        jogada_str = linha.strip()
-        print(f"Jogada {i:02d}/{total_jogadas:02d} - {jogada_str}")
+    for i, jogada_str in enumerate(linhas, start=1):
+        print(f"Jogada {i:02d}/{total_jogadas:02d} -> {jogada_str}")
 
-        opcao = input("[ENTER] Proxima jogada [Q] Sair do replay: ").strip().upper()
+        if i == total_jogadas:
+            print("\nFim da reprodução do replay!")
+            print("===================================================\n")
+            break
+
+        opcao = input("[ENTER] Próxima jogada | [Q] Sair do replay: ").strip().upper()
         if opcao == 'Q':
+            print("\nReprodução cancelada pelo usuário.")
+            print("===================================================\n")
             break

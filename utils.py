@@ -11,11 +11,11 @@ def exibir_fim_de_jogo(vencedor, total_jogadas, tempo_segundos):
     segundos = tempo_segundos % 60
     tempo_formatado = f"{horas:02d}:{minutos:02d}:{segundos:02d}"
 
-    print("\n==================================================")
-    print("                  FIM DE JOGO                     ")
-    print("==================================================")
-    print(f"Vencedor: {vencedor}")
-    print(f"Total de jogadas: {total_jogadas}")
+    print("""\n==================================================
+                      FIM DE JOGO                     
+    ==================================================
+    Vencedor: {vencedor}
+    Total de jogadas: {total_jogadas}""")
     print(f"Tempo de partida: {tempo_formatado}")
     print("--------------------------------------------------")
 

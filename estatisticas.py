@@ -1,27 +1,33 @@
 import os
 
+caminho_arquivo = os.path.join('data', 'estatisticas.txt')
+
 def salvar_estatisticas(vencedor, total_jogadas, acertos_humano):
     os.makedirs('data', exist_ok=True)
-    caminho_arquivo = os.path.join('data', 'estatisticas.txt')
 
     total_partidas = 0
     vitorias_humano = 0
     total_jogadas_acumuladas = 0
     total_acertos_acumulados = 0
 
-    try:
-        with open(caminho_arquivo, 'r', encoding='utf-8') as arquivo:
-        linhas = arquivo.readlines()
-
-        total_partidas = int(linhas[0])
-        vitorias_humano = int(linhas[1])
-        total_jogadas_acumuladas = int(linhas[2])
-        total_acertos_acumulados = int(linhas[3])
-    except FileNotFoundError:
-        pass
+    if os.path.exists(caminho_arquivo):
+        try:
+            with open(caminho_arquivo, 'r', encoding='utf-8') as arquivo:
+                linhas = [linha.strip() for linha in arquivo.readlines() if linha.strip()]
+                if len(linhas) >= 4:
+                    total_partidas = int(linhas[0])
+                    vitorias_humano = int(linhas[1])
+                    total_jogadas_acumuladas = int(linhas[2])
+                    total_acertos_acumulados = int(linhas[3])
+        except (ValueError, IndexError):
+            # Se o arquivo estiver corrompido, reinicia as métricas do zero
+            total_partidas = 0
+            vitorias_humano = 0
+            total_jogadas_acumuladas = 0
+            total_acertos_acumulados = 0
 
     total_partidas += 1
-    if vencedor == "Jogador":
+    if "Jogador" in vencedor:
         vitorias_humano += 1
     total_jogadas_acumuladas += total_jogadas
     total_acertos_acumulados += acertos_humano
@@ -34,29 +40,35 @@ def salvar_estatisticas(vencedor, total_jogadas, acertos_humano):
 
 
 def exibir_estatisticas():
-    caminho_arquivo = os.path.join('data', 'estatisticas.txt')
-
-    try:
-        with open(caminho_arquivo, 'r', encoding='utf-8') as arquivo:
-            linhas = arquivo.readlines()
-
-            total_partidas = int(linhas[0])
-            vitorias_humano = int(linhas[1])
-            total_jogadas_acumuladas = int(linhas[2])
-            total_acertos_acumulados = int(linhas[3])
-    except FileNotFoundError:
+    if not os.path.exists(caminho_arquivo):
         print("\n[!] Nenhuma estatística encontrada. Jogue uma partida primeiro!\n")
         return
 
-    if total_jogadas_acumuladas > 0:
-        aproveitamento = (total_acertos_acumulados/total_jogadas_acumuladas)*100
-    else:
-        aproveitamento = 0.0
+    try:
+        with open(caminho_arquivo, 'r', encoding='utf-8') as arquivo:
+            linhas = [linha.strip() for linha in arquivo.readlines() if linha.strip()]
 
-    print("\n================ ESTATÍSTICAS ================")
-    print(total_partidas)
-    print(vitorias_humano)
-    print(total_jogadas_acumuladas)
-    print(total_acertos_acumulados)
-    print(f"Aproveitamento: {aproveitamento:.1f}%")
-    print("=============================================")
+        if len(linhas) < 4:
+            print("\n[!] Arquivo de estatísticas corrompido ou incompleto.\n")
+            return
+
+        total_partidas = int(linhas[0])
+        vitorias_humano = int(linhas[1])
+        total_jogadas_acumuladas = int(linhas[2])
+        total_acertos_acumulados = int(linhas[3])
+
+        if total_jogadas_acumuladas > 0:
+            aproveitamento = (total_acertos_acumulados / total_jogadas_acumuladas) * 100
+        else:
+            aproveitamento = 0.0
+
+        print("\n================ ESTATÍSTICAS ================")
+        print(f" Total de partidas:           {total_partidas}")
+        print(f" Vitórias acumuladas:        {vitorias_humano}")
+        print(f" Total de jogadas realizadas:{total_jogadas_acumuladas}")
+        print(f" Total de disparos certeiros:{total_acertos_acumulados}")
+        print(f" Taxa de aproveitamento:     {aproveitamento:.1f}%")
+        print("=============================================\n")
+
+    except (ValueError, IndexError):
+        print("\n[!] Erro ao ler os dados do arquivo de estatísticas.\n")
