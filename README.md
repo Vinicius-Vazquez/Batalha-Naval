@@ -102,7 +102,7 @@ batalha_naval/
 ## Passo a passo:
 1. Clone este repositório:
 ```bash
-  git clone https://github.com/seu-usuario/batalha-naval.git
+  git clone https://github.com/Vinicius-Vazquez/batalha-naval.git
 cd batalha-naval
 ```
 
