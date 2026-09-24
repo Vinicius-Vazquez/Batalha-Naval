@@ -1,5 +1,6 @@
 """
-Módulo responsável pela criação, posicionamento e gerenciamento dos navios no tabuleiro.
+Módulo responsável pela criação, posicionamento e
+gerenciamento dos navios no tabuleiro.
 Atende aos Requisitos Funcionais RF03, RF04 e RF10.
 """
 
@@ -51,7 +52,9 @@ def posicionar_frota_automaticamente(tabuleiro, frota):
                 linha = random.randint(1, 10 - navio["tamanho"] + 1)
                 coluna = random.randint(1, 10)
 
-            if validar_posicionamento(tabuleiro, linha, coluna, navio["tamanho"], orientacao):
+            if validar_posicionamento(
+                tabuleiro, linha, coluna, navio["tamanho"], orientacao
+            ):
                 posicionar_navio(tabuleiro, navio, linha, coluna, orientacao)
                 posicionado = True
 
@@ -74,6 +77,11 @@ def checar_vitoria(frota):
 def conferir_frota(frota):
     print("\n--- RESUMO DA FROTA ---")
     for idx, navio in enumerate(frota, 1):
-        posicoes_formatadas = [f"{chr(64 + c)}{r}" for r, c in navio["posicoes"]]
-        print(f"Navio {idx} [{navio['tipo']} - {navio['tamanho']} casas]: {', '.join(posicoes_formatadas)}")
+        posicoes_formatadas = [
+            f"{chr(64 + c)}{r}" for r, c in navio["posicoes"]
+            ]
+        print(
+            f"Navio {idx} [{navio['tipo']}] - {navio['tamanho']} casas: "
+            f"{', '.join(posicoes_formatadas)}"
+        )
     print("-----------------------\n")

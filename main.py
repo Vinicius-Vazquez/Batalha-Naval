@@ -1,12 +1,18 @@
 import time
-from navios import criar_frota, posicionar_frota_automaticamente, checar_vitoria, conferir_frota
-from estatisticas import salvar_estatisticas, exibir_estatisticas
-from menu import exibir_menu_principal, selecao_de_modo_de_jogo
-from tabuleiro import criar_tabuleiro, exibir_tabuleiro
-from replay import salvar_replay, reproduzir_replay
-from jogador import realizar_jogada_humano
-from utils import exibir_fim_de_jogo
+
 from computador import ComputadorIA
+from estatisticas import exibir_estatisticas, salvar_estatisticas
+from jogador import realizar_jogada_humano
+from menu import exibir_menu_principal, selecao_de_modo_de_jogo
+from navios import (
+    checar_vitoria,
+    conferir_frota,
+    criar_frota,
+    posicionar_frota_automaticamente,
+)
+from replay import reproduzir_replay, salvar_replay
+from tabuleiro import criar_tabuleiro, exibir_tabuleiro
+from utils import exibir_fim_de_jogo
 
 
 def jogar_partida_vs_computador():
@@ -16,7 +22,9 @@ def jogar_partida_vs_computador():
     tabuleiro_computador_real = criar_tabuleiro()
     tabuleiro_computador_visivel = criar_tabuleiro()
     frota_computador = criar_frota()
-    posicionar_frota_automaticamente(tabuleiro_computador_real, frota_computador)
+    posicionar_frota_automaticamente(
+        tabuleiro_computador_real, frota_computador
+    )
 
     while True:
         tabuleiro_humano_real = criar_tabuleiro()
@@ -28,13 +36,18 @@ def jogar_partida_vs_computador():
         exibir_tabuleiro(tabuleiro_humano_real)
         conferir_frota(frota_humano)
 
-        confirmar = input("Deseja confirmar esse posicionamento? [S]im / [R]eposicionar: ").strip().upper()
+        confirmar = input(
+            "Deseja confirmar esse posicionamento? [S]im / [R]eposicionar: "
+        ).strip().upper()
         if confirmar == 'S':
             break
         elif confirmar == 'R':
             print("\nReposicionando sua frota...")
         else:
-            print("\n[!] Opção inválida! Digite 'S' para confirmar ou 'R' para reposicionar.")
+            print(
+                """\n[!] Opção inválida! Digite 'S' para
+                confirmar ou 'R' para reposicionar."""
+            )
 
     inicio = time.time()
     total_jogadas = 0
@@ -44,10 +57,14 @@ def jogar_partida_vs_computador():
     while True:
         print("\n--- SEU TABULEIRO ADVERSÁRIO ---")
         exibir_tabuleiro(tabuleiro_computador_visivel)
-        coordenada, resultado = realizar_jogada_humano(tabuleiro_computador_real, tabuleiro_computador_visivel, frota_computador)
+        coordenada, resultado = realizar_jogada_humano(
+            tabuleiro_computador_real,
+            tabuleiro_computador_visivel,
+            frota_computador,
+        )
         jogada_str = f"Jogador - {coordenada} - {resultado}"
         historico_jogadas.append(jogada_str)
-        
+
         if resultado == 'Acerto':
             acertos_humano += 1
         total_jogadas += 1
@@ -57,7 +74,8 @@ def jogar_partida_vs_computador():
             vencedor = "Jogador"
             break
 
-        coordenada, resultado = computador.realizar_jogada(tabuleiro_humano_real, tabuleiro_humano_visivel, frota_humano)
+        coordenada, resultado = computador.realizar_jogada(
+            tabuleiro_humano_real, tabuleiro_humano_visivel, frota_humano)
         jogada_str = f"Computador - {coordenada} - {resultado}"
         historico_jogadas.append(jogada_str)
         total_jogadas += 1
@@ -83,17 +101,18 @@ def jogar_partida_dois_jogadores():
     tabuleiro_j1_visivel = criar_tabuleiro()
     tabuleiro_j2_real = criar_tabuleiro()
     tabuleiro_j2_visivel = criar_tabuleiro()
-    
+
     frota_j1 = criar_frota()
     frota_j2 = criar_frota()
-    
+
     posicionar_frota_automaticamente(tabuleiro_j1_real, frota_j1)
     posicionar_frota_automaticamente(tabuleiro_j2_real, frota_j2)
 
     print("\n================ JOGADOR 1 ================")
     print("Sua frota foi posicionada:")
     exibir_tabuleiro(tabuleiro_j1_real)
-    input("\n[Jogador 1] Pressione ENTER para ocultar a tela e passar para o Jogador 2...")
+    input("\n[Jogador 1] Pressione ENTER para ocultar \
+        a tela e passar para o Jogador 2...")
     print("\n" * 50)
 
     print("\n================ JOGADOR 2 ================")
@@ -111,7 +130,8 @@ def jogar_partida_dois_jogadores():
     while True:
         print("\n--- TURNO: JOGADOR 1 ---")
         exibir_tabuleiro(tabuleiro_j2_visivel)
-        coordenada, resultado = realizar_jogada_humano(tabuleiro_j2_real, tabuleiro_j2_visivel, frota_j2)
+        coordenada, resultado = realizar_jogada_humano(
+            tabuleiro_j2_real, tabuleiro_j2_visivel, frota_j2)
         historico_jogadas.append(f"Jogador 1 - {coordenada} - {resultado}")
         if resultado == 'Acerto':
             acertos_j1 += 1
@@ -124,7 +144,8 @@ def jogar_partida_dois_jogadores():
 
         print("\n--- TURNO: JOGADOR 2 ---")
         exibir_tabuleiro(tabuleiro_j1_visivel)
-        coordenada, resultado = realizar_jogada_humano(tabuleiro_j1_real, tabuleiro_j1_visivel, frota_j1)
+        coordenada, resultado = realizar_jogada_humano(
+            tabuleiro_j1_real, tabuleiro_j1_visivel, frota_j1)
         historico_jogadas.append(f"Jogador 2 - {coordenada} - {resultado}")
         if resultado == 'Acerto':
             acertos_j2 += 1
@@ -151,7 +172,9 @@ def main():
     print("==================================================")
     print("           BATALHA NAVAL - GPTECH GAMES           ")
     print("==================================================")
-    modo_interface = input("Deseja iniciar o jogo em modo [G]ráfico ou [T]exto? ").strip().upper()
+    modo_interface = input(
+        "Deseja iniciar o jogo em modo [G]ráfico ou [T]exto? "
+    ).strip().upper()
 
     if modo_interface == 'G':
         from gui import iniciar_interface_grafica
@@ -161,7 +184,7 @@ def main():
     # MODO TEXTO CONVENCIONAL
     while True:
         opcao = exibir_menu_principal()
-        
+
         if opcao == '1':
             while True:
                 modo = selecao_de_modo_de_jogo()
@@ -183,22 +206,24 @@ def main():
             reproduzir_replay()
 
         elif opcao == '4':
-            print("""\n================ INSTRUÇÕES DE JOGO ================
-1. OBJETIVO: Afundar todos os navios da frota adversária.
-2. COMO JOGAR: Informe a coordenada de disparo quando solicitado (ex: C5, J10).
-3. SÍMBOLOS DO TABULEIRO:
-   - '~' : Água não jogada
-   - 'O' : Tiro na água (Erro)
-   - 'X' : Tiro certeiro (Acerto)
-   - 'N' : Navio (Visível apenas no seu próprio tabuleiro)
-====================================================
+            print("""
+                ================ INSTRUÇÕES DE JOGO ================
+                1. OBJETIVO: Afundar todos os navios da frota adversária.
+                2. COMO JOGAR: Informe a coordenada de disparo\
+                    quando solicitado (ex: C5, J10).
+                3. SÍMBOLOS DO TABULEIRO:
+                   - '~' : Água não jogada
+                   - 'O' : Tiro na água (Erro)
+                   - 'X' : Tiro certeiro (Acerto)
+                   - 'N' : Navio (Visível apenas no seu próprio tabuleiro)
+                ====================================================
 
-================ CRÉDITOS ================
-Nome do estúdio: GPTech Games
-Desenvolvedor: Vinicius Souza Vazquez
-Professor / Product Owner: Prof. Guido Pantuza
-Disciplina: Programação em Python - CEFET-MG
-====================================================\n""")
+                ================ CRÉDITOS ================
+                Nome do estúdio: GPTech Games
+                Desenvolvedor: Vinicius Souza Vazquez
+                Professor / Product Owner: Prof. Guido Pantuza
+                Disciplina: Programação em Python - CEFET-MG
+                ====================================================\n""")
 
         elif opcao == '5':
             print("Saindo do jogo... Até logo!")

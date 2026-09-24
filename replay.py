@@ -8,7 +8,7 @@ def salvar_replay(historico_jogadas):
     try:
         with open(CAMINHO_REPLAY, 'w', encoding='utf-8') as arquivo:
             for jogada in historico_jogadas:
-                arquivo.write(f"{jogada}\n")
+                arquivo.writelines(f"{jogada}\n")
     except OSError as e:
         print(f"\n[!] Erro ao salvar arquivo de replay: {e}")
 
@@ -20,7 +20,9 @@ def reproduzir_replay():
 
     try:
         with open(CAMINHO_REPLAY, 'r', encoding='utf-8') as arquivo:
-            linhas = [linha.strip() for linha in arquivo.readlines() if linha.strip()]
+            linhas = [
+                linha.strip() for linha in arquivo if linha.strip()
+            ]
     except OSError:
         print("\n[!] Erro ao ler o arquivo de replay.\n")
         return
@@ -40,7 +42,9 @@ def reproduzir_replay():
             print("===================================================\n")
             break
 
-        opcao = input("[ENTER] Próxima jogada | [Q] Sair do replay: ").strip().upper()
+        opcao = input(
+            "[ENTER] Próxima jogada | [Q] Sair do replay: "
+            ).strip().upper()
         if opcao == 'Q':
             print("\nReprodução cancelada pelo usuário.")
             print("===================================================\n")

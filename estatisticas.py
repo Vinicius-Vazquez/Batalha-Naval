@@ -14,7 +14,7 @@ def salvar_estatisticas(vencedor, total_jogadas, acertos_humano):
     if os.path.exists(CAMINHO_ARQUIVO):
         try:
             with open(CAMINHO_ARQUIVO, 'r', encoding='utf-8') as arquivo:
-                linhas = [linha.strip() for linha in arquivo.readlines() if linha.strip()]
+                linhas = [linha.strip() for linha in arquivo if linha.strip()]
                 if len(linhas) >= 4:
                     total_partidas = int(linhas[0])
                     vitorias_humano = int(linhas[1])
@@ -44,12 +44,15 @@ def salvar_estatisticas(vencedor, total_jogadas, acertos_humano):
 
 def exibir_estatisticas():
     if not os.path.exists(CAMINHO_ARQUIVO):
-        print("\n[!] Nenhuma estatística encontrada. Jogue uma partida primeiro!\n")
+        print(""""
+            \n[!] Nenhuma estatística encontrada.
+            Jogue uma partida primeiro!\n
+        """)
         return
 
     try:
         with open(CAMINHO_ARQUIVO, 'r', encoding='utf-8') as arquivo:
-            linhas = [linha.strip() for linha in arquivo.readlines() if linha.strip()]
+            linhas = [linha.strip() for linha in arquivo if linha.strip()]
 
         if len(linhas) < 4:
             print("\n[!] Arquivo de estatísticas corrompido ou incompleto.\n")
@@ -61,7 +64,8 @@ def exibir_estatisticas():
         total_acertos_acumulados = int(linhas[3])
 
         if total_jogadas_acumuladas > 0:
-            aproveitamento = (total_acertos_acumulados / total_jogadas_acumuladas) * 100
+            aproveitamento = (
+                total_acertos_acumulados / total_jogadas_acumuladas) * 100
         else:
             aproveitamento = 0.0
 

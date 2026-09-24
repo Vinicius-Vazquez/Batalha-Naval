@@ -1,7 +1,8 @@
 def exibir_menu_principal():
     while True:
-        print("""==================================================
-        \t\tBATALHA NAVAL - GPTECH GAMES
+        print("""
+        ==================================================
+                     BATALHA NAVAL - GPTECH GAMES
         ==================================================
         1. Nova partida
         2. Ver estatisticas
@@ -24,7 +25,7 @@ def selecao_de_modo_de_jogo():
         [2] Dois Jogadores
         [0] Voltar ao menu
         ==============================================""")
-        
+
         modo_selecionado = input("Selecione o modo de jogo: ").strip()
 
         if modo_selecionado in ['1', '2', '0']:

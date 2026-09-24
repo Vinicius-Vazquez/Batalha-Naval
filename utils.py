@@ -1,5 +1,3 @@
-import time
-
 def exibir_fim_de_jogo(vencedor, total_jogadas, tempo_segundos):
     """
     Exibe a tela de encerramento da partida com estatísticas e opções pós-jogo.
@@ -11,13 +9,14 @@ def exibir_fim_de_jogo(vencedor, total_jogadas, tempo_segundos):
     segundos = tempo_segundos % 60
     tempo_formatado = f"{horas:02d}:{minutos:02d}:{segundos:02d}"
 
-    print("""\n==================================================
-                      FIM DE JOGO                     
-    ==================================================
-    Vencedor: {vencedor}
-    Total de jogadas: {total_jogadas}""")
-    print(f"Tempo de partida: {tempo_formatado}")
-    print("--------------------------------------------------")
+    print(f"""
+==================================================
+                   FIM DE JOGO
+==================================================
+Vencedor: {vencedor}
+Total de jogadas: {total_jogadas}
+Tempo de partida: {tempo_formatado}
+--------------------------------------------------""")
 
     while True:
         print("[1] Ver replay  [2] Nova partida  [3] Menu principal")

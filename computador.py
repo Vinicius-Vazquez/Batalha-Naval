@@ -1,4 +1,5 @@
 import random
+
 from navios import checar_se_afundou
 
 
@@ -18,10 +19,12 @@ class ComputadorIA:
             (linha, coluna - 1),
             (linha, coluna + 1)
         ]
-        
+
         validos = []
         for r, c in vizinhos:
-            if 1 <= r <= 10 and 1 <= c <= 10 and (r, c) not in self.jogadas_realizadas:
+            if (1 <= r <= 10 and 1 <= c <= 10) and (
+                (r, c) not in self.jogadas_realizadas
+            ):
                 validos.append((r, c))
         return validos
 
@@ -56,10 +59,14 @@ class ComputadorIA:
                     self.alvos_pendentes.append(alvo)
 
             for navio in frota_alvo:
-                if (linha, coluna) in navio["posicoes"]:
-                    if checar_se_afundou(tabuleiro_alvo, navio):
-                        print(f"O computador afundou o seu navio {navio['tipo'].lower()}!")
-                        return coordenada_str, 'Acerto'
+                if (linha, coluna) in navio["posicoes"] and checar_se_afundou(
+                    tabuleiro_alvo, navio
+                ):
+                    print(
+                        "O computador afundou o seu navio "
+                        f"{navio['tipo'].lower()}!"
+                    )
+                    return coordenada_str, 'Acerto'
 
             print("O computador acertou um dos seus navios!")
             return coordenada_str, 'Acerto'
