@@ -128,7 +128,7 @@ cd batalha-naval
 
 ## 📹 Demonstração em Vídeo
 
-- 🔗 [Clique aqui para assistir ao vídeo de apresentação do projeto no YouTube/Drive](https://link-do-seu-video-aqui.com) *(Duração: +5 min)*
+- 🔗 [![Assista ao vídeo no YouTube](https://img.youtube.com/vi/lxi38KcbUTc/0.jpg)](https://www.youtube.com/watch?v=lxi38KcbUTc) *(Duração: 21 min)*
 
 ---
 
