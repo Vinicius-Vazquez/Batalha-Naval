@@ -135,7 +135,7 @@ cd batalha-naval
 ## 🧑‍💻 Autor
 
 Desenvolvido por **Vinicius Souza Vazquez**  
-Estudante de **Engenharia da Computação — CEFET-MG (Campus Divinópolis)**  
+Estudante de **Engenharia da Computação — UFCI-MG (Campus Divinópolis)**  
 Disciplina: Programação em Python | Professor: Guido Pantuza  
 
 ---
