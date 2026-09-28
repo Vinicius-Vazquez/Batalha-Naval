@@ -132,6 +132,26 @@ cd batalha-naval
 
 ---
 
+## 🚀 Próximas Atualizações
+
+As seguintes melhorias e novas funcionalidades estão planejadas para as próximas versões do projeto:
+
+### 🖥️ Interface Gráfica (GUI)
+- **Customização visual:** Alteração e personalização das cores dos navios da frota do computador.
+- **Opção de refazer:** Adição de um módulo na interface para refazer/reiniciar o tabuleiro facilmente.
+- **Fluxo do modo 2 Jogadores (Local):**
+  1. Exibição do tabuleiro do Jogador 1.
+  2. Tela intermediária solicitando a confirmação do Jogador 2 para garantir a privacidade da frota.
+  3. Exibição do tabuleiro do Jogador 2.
+  4. Transição para a tela de jogo principal com dois tabuleiros visíveis, permitindo jogadas alternadas (um ataque por vez).
+- **Métricas detalhadas:** Adição e exibição de mais dados estatísticos sobre as partidas.
+- **Replay aprimorado:** Melhorias na interface gráfica e na estrutura de organização dos dados de replay da última partida.
+
+### 💻 Modo Terminal (CLI)
+- **Melhoria no modo 2 Jogadores:** No momento de transição entre turnos/jogadores, após solicitar a ação de ocultar o tabuleiro do Jogador 1, o sistema dará um espaçamento no terminal e aguardará uma confirmação extra (`Enter`) antes de exibir o tabuleiro do Jogador 2.
+
+---
+
 ## 🧑‍💻 Autor
 
 Desenvolvido por **Vinicius Souza Vazquez**  
